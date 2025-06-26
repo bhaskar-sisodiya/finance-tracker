@@ -6,12 +6,12 @@ A full-stack MERN application that lets users track income, expenses, and monthl
 - **Frontend:** React, Vite, TailwindCSS, React Router
 - **Backend:** Express.js, MongoDB, Mongoose
 - **Authentication:** JWT with custom middleware
-- **Visualization:** Chart.js (or your chart lib)
-- **Snapshot Logic:** Monthly balance recalculation via scheduled job
+- **Visualization:** Chart.js, Recharts
+- **Snapshot Logic:** Monthly balance recalculation
 
 ## 📦 Features
 - User registration and login
-- Add, edit, and delete expenses
+- Add expenses
 - Credit vs. Debit tracking with pie/line/bar charts
 - Automated monthly summaries (with savings/deficit logic)
 - Profile customization with avatars
