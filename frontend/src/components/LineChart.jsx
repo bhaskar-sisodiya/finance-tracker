@@ -59,34 +59,39 @@ const LineChart = ({ initialYear, initialMonth }) => {
   return (
     <div className="w-[50%] h-full bg-white flex flex-col p-2 rounded-2xl">
       <div className="flex justify-between items-center mb-2">
-  <h2 className="text-lg font-semibold text-gray-700">Daily Debit Trend</h2>
+        <h2 className="text-lg font-semibold text-gray-700">
+          Daily Debit Trend
+        </h2>
 
-  <div className="flex gap-2 items-center">
-    <select
-      value={month}
-      onChange={(e) => setMonth(Number(e.target.value))}
-      className="px-2 py-1 rounded text-sm border"
-    >
-      {Array.from({ length: 12 }, (_, i) => (
-        <option key={i} value={i + 1}>
-          {new Date(0, i).toLocaleString("default", { month: "long" })}
-        </option>
-      ))}
-    </select>
+        <div className="flex gap-2 items-center">
+          <select
+            value={month}
+            onChange={(e) => setMonth(Number(e.target.value))}
+            className="px-2 py-1 rounded text-sm border"
+          >
+            {Array.from({ length: 12 }, (_, i) => (
+              <option key={i} value={i + 1}>
+                {new Date(0, i).toLocaleString("default", { month: "long" })}
+              </option>
+            ))}
+          </select>
 
-    <select
-      value={year}
-      onChange={(e) => setYear(Number(e.target.value))}
-      className="px-2 py-1 rounded text-sm border"
-    >
-      {[2023, 2024, 2025].map((y) => (
-        <option key={y} value={y}>
-          {y}
-        </option>
-      ))}
-    </select>
-  </div>
-</div>
+          <select
+            value={year}
+            onChange={(e) => setYear(Number(e.target.value))}
+            className="px-2 py-1 rounded text-sm border"
+          >
+            {[...Array(3)].map((_, i) => {
+              const dynamicYear = new Date().getFullYear() - (2 - i);
+              return (
+                <option key={dynamicYear} value={dynamicYear}>
+                  {dynamicYear}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      </div>
       <ResponsiveContainer width="100%" height="100%">
         <ReLineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />

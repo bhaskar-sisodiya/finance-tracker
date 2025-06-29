@@ -10,54 +10,54 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const BarChart = () => {
+const BarChart = ({ refreshTrigger }) => {
   const currentYear = new Date().getFullYear();
   const yearOptions = [currentYear - 2, currentYear - 1, currentYear];
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [data, setData] = useState([]);
   const token = localStorage.getItem("token");
 
+  const fetchData = async () => {
+    try {
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/expenses/yearly-summary/${selectedYear}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (!res.ok) throw new Error("Failed to fetch bar chart data");
+
+      const summary = await res.json();
+
+      const monthNames = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+
+      const formatted = summary.map((item) => ({
+        name: monthNames[item.month - 1],
+        debit: item.debit,
+        credit: item.credit,
+      }));
+
+      setData(formatted);
+    } catch (error) {
+      console.error("BarChart fetch error:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(
-          `${
-            import.meta.env.VITE_API_URL
-          }/api/expenses/yearly-summary/${selectedYear}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-
-        if (!res.ok) throw new Error("Failed to fetch bar chart data");
-
-        const summary = await res.json();
-
-        const monthNames = [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ];
-
-        const formatted = summary.map((item) => ({
-          name: monthNames[item.month - 1],
-          debit: item.debit,
-          credit: item.credit,
-        }));
-
-        setData(formatted);
-      } catch (error) {
-        console.error("BarChart fetch error:", error);
-      }
-    };
-
     fetchData();
   }, [selectedYear, token]);
 
