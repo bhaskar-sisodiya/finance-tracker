@@ -1,3 +1,4 @@
+// monthlySnapshot.js
 import Expense from "../models/Expense.js";
 import User from "../models/User.js";
 import MonthlySummary from "../models/MonthlySummary.js";
@@ -34,7 +35,7 @@ export const generateUserSnapshot = async (userId) => {
     .filter((e) => e.type === "credit")
     .reduce((sum, e) => sum + e.amount, 0);
 
-  const remaining = totalCredit - totalDebit;
+  const remaining = user.budget + totalCredit - totalDebit;
 
   if (remaining > 0) {
     const offset = Math.min(remaining, user.deficit);

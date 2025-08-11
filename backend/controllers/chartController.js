@@ -1,3 +1,4 @@
+// detailsController.js
 import Expense from "../models/Expense.js";
 import mongoose from "mongoose";
 import MonthlySummary from "../models/MonthlySummary.js";
