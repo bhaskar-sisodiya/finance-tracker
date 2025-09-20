@@ -15,7 +15,7 @@ const Footer = () => {
             About
           </a>
           <a
-            href="https://github.com/"
+            href="https://github.com/bhaskar-sisodiya/finance-tracker/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline transition duration-150 ease-in-out"
@@ -23,7 +23,9 @@ const Footer = () => {
             GitHub
           </a>
           <a
-            href="mailto:support@example.com"
+            href="https://mail.google.com/mail/?view=cm&to=sisodiyabhaskar@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
             className="hover:underline transition duration-150 ease-in-out"
           >
             Contact

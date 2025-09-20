@@ -28,7 +28,7 @@ export const updateUserDetails = async (req, res) => {
         id: updatedUser._id,
         name: updatedUser.name,
         profilePic: updatedUser.profilePic,
-        budget: updatedUser.budget,
+        budget: Number(updatedUser.budget),
       },
     });
   } catch (error) {

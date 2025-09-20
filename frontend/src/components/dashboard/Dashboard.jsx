@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "./Navbar";
-import User from "./User";
+import User from "../profile/User";
+import Navbar from "../layout/Navbar";
 
 const Dashboard = () => {
   return (

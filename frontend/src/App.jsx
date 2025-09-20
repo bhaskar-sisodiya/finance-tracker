@@ -1,13 +1,13 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import PrivateRoute from "./components/PrivateRoute.jsx";
-import HomeRedirector from "./components/HomeRedirector.jsx";
-import LoginPage from "./components/LoginPage";
-import Dashboard from "./components/Dashboard";
-import Registration from "./components/Registration.jsx";
-import EditProfilePage from "./pages/EditProfile";
-import Stats from "./components/Stats.jsx";
-import About from "./components/About.jsx";
+import PrivateRoute from "./components/common/PrivateRoute.jsx";
+import HomeRedirector from "./components/common/HomeRedirector.jsx";
+import LoginPage from "./components/auth/LoginPage.jsx";
+import Dashboard from "./components/dashboard/Dashboard.jsx";
+import Registration from "./components/auth/Registration.jsx";
+import EditProfilePage from "./pages/EditProfilePage.jsx";
+import Stats from "./components/dashboard/Stats.jsx";
+import About from "./pages/About.jsx";
 
 const App = () => {
   return (

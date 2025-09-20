@@ -23,47 +23,36 @@ const LineChart = ({ initialYear, initialMonth }) => {
     const fetchTrendAndUser = async () => {
       try {
         const trendRes = await fetch(
-          `${
-            import.meta.env.VITE_API_URL
-          }/api/expenses/daily-trend/${year}/${month}`,
+          `${import.meta.env.VITE_API_URL}/api/expenses/daily-trend/${year}/${month}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-
-        if (!trendRes.ok) throw new Error("Trend fetch failed");
-
         const trend = await trendRes.json();
-        const daysInMonth = new Date(year, month, 0).getDate();
 
+        const daysInMonth = new Date(year, month, 0).getDate();
         const filledData = Array.from({ length: daysInMonth }, (_, i) => {
           const match = trend.find((item) => item._id === i + 1);
           return { day: i + 1, total: match ? match.total : 0 };
         });
-
         setData(filledData);
 
-        const userRes = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/user/me`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-
+        const userRes = await fetch(`${import.meta.env.VITE_API_URL}/api/user/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         const user = await userRes.json();
         setBudget(user.budget);
       } catch (err) {
-        console.error("Line chart error:", err);
+        console.error(err);
       }
     };
-
     fetchTrendAndUser();
   }, [year, month, token]);
 
   return (
-    <div className="w-[50%] h-full bg-white flex flex-col p-2 rounded-2xl">
+    <div className="w-full h-full bg-white flex flex-col p-2 rounded-2xl shadow-sm">
+      {/* Header with month/year selectors */}
       <div className="flex justify-between items-center mb-2">
-        <h2 className="text-lg font-semibold text-gray-700">
-          Daily Debit Trend
-        </h2>
-
-        <div className="flex gap-2 items-center">
+        <h2 className="text-lg font-semibold text-gray-700">Daily Debit Trend</h2>
+        <div className="flex gap-2">
           <select
             value={month}
             onChange={(e) => setMonth(Number(e.target.value))}
@@ -71,11 +60,10 @@ const LineChart = ({ initialYear, initialMonth }) => {
           >
             {Array.from({ length: 12 }, (_, i) => (
               <option key={i} value={i + 1}>
-                {new Date(0, i).toLocaleString("default", { month: "long" })}
+                {new Date(0, i).toLocaleString("default", { month: "short" })}
               </option>
             ))}
           </select>
-
           <select
             value={year}
             onChange={(e) => setYear(Number(e.target.value))}
@@ -92,52 +80,30 @@ const LineChart = ({ initialYear, initialMonth }) => {
           </select>
         </div>
       </div>
-      <ResponsiveContainer width="100%" height="100%">
-        <ReLineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="day" />
-          <YAxis />
-          <Tooltip
-            formatter={(value) => [`₹${value}`, "Total"]}
-            labelFormatter={(label) => `Day ${label}`}
-          />
-          <Line
-            type="monotone"
-            dataKey="total"
-            stroke="#4f46e5"
-            strokeWidth={2}
-            isAnimationActive={true}
-            animationDuration={400}
-          />
-          {budget && (
-            <ReferenceLine
-              y={budget}
-              stroke="#ef4444"
-              strokeDasharray="5 5"
-              label={{
-                value: "Budget",
-                position: "right",
-                fill: "#ef4444",
-                fontSize: 12,
-              }}
+
+      {/* Chart */}
+      <div className="flex-1 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <ReLineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="day" />
+            <YAxis />
+            <Tooltip
+              formatter={(value) => [`₹${value}`, "Total"]}
+              labelFormatter={(label) => `Day ${label}`}
             />
-          )}
-          {year === new Date().getFullYear() &&
-            month === new Date().getMonth() + 1 && (
+            <Line type="monotone" dataKey="total" stroke="#4f46e5" strokeWidth={2} />
+            {budget && (
               <ReferenceLine
-                x={new Date().getDate()}
-                stroke="orange"
-                strokeDasharray="3 3"
-                label={{
-                  value: "Today",
-                  position: "top",
-                  fill: "orange",
-                  fontSize: 12,
-                }}
+                y={budget}
+                stroke="#ef4444"
+                strokeDasharray="5 5"
+                label={{ value: "Budget", position: "right", fill: "#ef4444", fontSize: 12 }}
               />
             )}
-        </ReLineChart>
-      </ResponsiveContainer>
+          </ReLineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

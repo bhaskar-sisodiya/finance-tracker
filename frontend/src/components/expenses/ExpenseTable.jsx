@@ -8,24 +8,21 @@ const ExpenseTable = () => {
     const fetchExpenses = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/expenses/current-month`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/expenses/current-month`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
         setExpenses(res.data);
       } catch (err) {
         console.error("Failed to load expenses", err);
       }
     };
-
     fetchExpenses();
   }, []);
 
   return (
-    <div className="h-full overflow-x-auto scroll-y-hidden w-[70%] rounded-3xl">
-      <table className="min-h-full min-w-full table-auto border border-gray-200 rounded-md shadow-sm">
+    <div className="h-full overflow-y-auto w-full rounded-3xl">
+      <table className="h-full min-w-full table-auto border border-gray-200 rounded-md shadow-sm">
         <thead className="bg-[#4caf50] text-white text-sm">
           <tr>
             <th className="p-2 text-left">Date</th>
@@ -48,7 +45,7 @@ const ExpenseTable = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="100%" className="text-center p-4 text-gray-500 align-middle">
+              <td colSpan="5" className="text-center p-4 text-gray-500">
                 No expenses recorded this month.
               </td>
             </tr>

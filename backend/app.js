@@ -1,44 +1,52 @@
 import express from "express";
-const app = express();
-const port = 3000;
-
 import dotenv from "dotenv";
+import cors from "cors";
+import connectDB from "./config/db.js";
+
 dotenv.config();
 
-import connectDB from "./config/db.js";
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Connect to MongoDB Atlas
 connectDB();
 
-// Allow requests from your frontend
-import cors from 'cors';
-const allowedOrigins = ['http://localhost:5173', 'https://your-deployed-frontend.com'];
+// CORS — allow Netlify frontend + local dev
+const allowedOrigins = [
+  process.env.FRONTEND_URL || "http://localhost:5173"
+];
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
-
-
-import expenseRoutes from "./routes/expenseRoutes.js";
-import authRoutes from './routes/authRoutes.js';
-import summaryRoutes from './routes/summaryRoutes.js'
-
+// Body parsers
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
-
+// Routes
+import expenseRoutes from "./routes/expenseRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import summaryRoutes from "./routes/summaryRoutes.js";
 
 app.use("/api/expenses", expenseRoutes);
-app.use('/api/auth', authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/user", summaryRoutes);
 
+// Health check route
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
 
 app.listen(port, () => {
-  console.log(`Server is listening on http://localhost:${port}`);
+  console.log(`Server running on port ${port}`);
 });

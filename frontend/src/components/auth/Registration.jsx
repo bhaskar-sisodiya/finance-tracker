@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Registration = () => {
   const { login } = useAuth();
@@ -31,7 +31,7 @@ const Registration = () => {
       const data = await res.json();
 
       if (res.ok) {
-        login(data.token); //  Store token in context + localStorage
+        login(data.token);
         navigate("/dashboard");
       } else {
         alert(data.message || "Registration failed");
@@ -43,22 +43,39 @@ const Registration = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 relative p-2 sm:p-4">
+      {/* Back Button */}
       <button
         onClick={() => navigate("/")}
-        className="absolute top-4 left-4 text-blue-500 hover:text-blue-700 transition transform hover:scale-105"
+        className="
+          absolute top-2 sm:top-4 md:top-5
+          left-2 sm:left-4 md:left-5
+          bg-gradient-to-r from-green-400 to-green-600
+          text-white font-semibold
+          px-2 sm:px-3 md:px-4
+          py-1 sm:py-1.5 md:py-2
+          rounded-md sm:rounded-lg
+          shadow-md
+          hover:from-green-500 hover:to-green-700
+          hover:scale-105 transition-transform duration-200
+          flex items-center gap-1 sm:gap-2
+          text-xs sm:text-sm md:text-base
+        "
       >
-        ← Back to Home
+        <span className="text-sm sm:text-base md:text-lg">←</span> Back to Home
       </button>
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+
+      {/* Registration Form */}
+      <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-md w-full max-w-md flex flex-col">
+        <h2 className="text-xl sm:text-2xl font-bold mb-5 text-center text-green-700">
           Create an Account
         </h2>
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          <div>
+
+        <form className="flex flex-col gap-4 sm:gap-5" onSubmit={handleSubmit}>
+          <div className="flex flex-col">
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm sm:text-base font-medium text-gray-700"
             >
               Name
             </label>
@@ -69,14 +86,14 @@ const Registration = () => {
               value={formData.name}
               onChange={handleChange}
               placeholder="John Doe"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+              className="w-full px-3 py-2 sm:py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-300"
             />
           </div>
 
-          <div>
+          <div className="flex flex-col">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm sm:text-base font-medium text-gray-700"
             >
               Email
             </label>
@@ -87,14 +104,14 @@ const Registration = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="you@example.com"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+              className="w-full px-3 py-2 sm:py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-300"
             />
           </div>
 
-          <div>
+          <div className="flex flex-col">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm sm:text-base font-medium text-gray-700"
             >
               Password
             </label>
@@ -105,14 +122,14 @@ const Registration = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="••••••••"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+              className="w-full px-3 py-2 sm:py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-300"
             />
           </div>
 
-          <div>
+          <div className="flex flex-col">
             <label
               htmlFor="budget"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm sm:text-base font-medium text-gray-700"
             >
               Monthly Budget
             </label>
@@ -123,21 +140,22 @@ const Registration = () => {
               value={formData.budget}
               onChange={handleChange}
               placeholder="e.g. 5000"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+              className="w-full px-3 py-2 sm:py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-300"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+            className="w-full bg-gradient-to-r from-green-500 to-green-700 text-white py-2 sm:py-2.5 rounded-md font-semibold hover:from-green-600 hover:to-green-800 transition"
           >
             Register
           </button>
-          <p className="text-sm text-center mt-4 text-gray-600">
+
+          <p className="text-sm sm:text-base text-center mt-3 text-gray-600">
             Already have an account?{" "}
             <span
               onClick={() => navigate("/login")}
-              className="text-blue-600 cursor-pointer hover:underline"
+              className="text-green-600 cursor-pointer hover:underline"
             >
               Log in
             </span>

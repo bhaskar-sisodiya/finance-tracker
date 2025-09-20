@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import EditProfile from "../components/EditProfile"; // your reusable form
+import EditProfile from "../components/profile/EditProfile"; // your reusable form
 
 const EditProfilePage = () => {
   const [user, setUser] = useState(null);

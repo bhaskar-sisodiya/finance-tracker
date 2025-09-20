@@ -20,7 +20,7 @@ A full-stack MERN application that lets users track income, expenses, and monthl
 ```bash
 cd backend
 npm install
-npm run dev
+nodemon app.js
 
 cd frontend
 npm install

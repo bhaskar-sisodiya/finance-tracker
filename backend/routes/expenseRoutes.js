@@ -1,7 +1,10 @@
 import express from "express";
 import protect from "../middleware/authMiddleware.js";
 import Expense from "../models/Expense.js";
-import { getMonthlyTrend, getYearlySummary } from "../controllers/chartController.js";
+import {
+  getMonthlyTrend,
+  getYearlySummary,
+} from "../controllers/chartController.js";
 
 const router = express.Router();
 
@@ -10,13 +13,13 @@ router.post("/", protect, async (req, res) => {
     const { date, domain, title, description, amount, type } = req.body;
 
     const expense = new Expense({
-      date: new Date(date),
+      ...(date && { date: new Date(date) }),
       domain,
       title,
       description,
       amount,
       type,
-      user: req.user.id, // Auto-linking to the logged-in user
+      user: req.user.id,
     });
 
     await expense.save();
@@ -43,8 +46,9 @@ router.get("/current-month", protect, async (req, res) => {
     const expenses = await Expense.find({
       user: req.user.id,
       date: { $gte: startOfMonth, $lte: endOfMonth },
-    }).select("date title domain amount type")
-    .sort({ date: -1 });
+    })
+      .select("date title domain amount type")
+      .sort({ date: -1 });
 
     res.json(expenses);
   } catch (err) {

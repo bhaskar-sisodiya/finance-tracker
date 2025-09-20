@@ -41,20 +41,22 @@ const ExpensePieChart = ({ expenses }) => {
 
   if (!chartData || chartData.labels.length === 0) {
     return (
-      <h2 className="text-white text-2xl font-semibold flex justify-center items-center">No data to visualize yet.</h2>
+      <h2 className="text-white text-base sm:text-sm font-semibold flex justify-center items-center">
+        No data to visualize yet.
+      </h2>
     );
   }
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // 🔧 allows custom sizing
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "bottom",
         labels: {
           color: "#ffffff",
           font: {
-            size: 14,
+            size: 12,
             family: "Inter",
           },
         },
@@ -64,12 +66,17 @@ const ExpensePieChart = ({ expenses }) => {
   };
 
   return (
-    <div className="w-full flex flex-col justify-center items-center rounded-b-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg">
-      <h3 className="text-center text-2xl font-semibold text-white">
+    <div className="w-full flex-1 flex flex-col justify-between items-center rounded-b-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg p-6">
+      {/* Heading */}
+      <h3 className="text-center text-sm sm:text-base md:text-lg font-semibold text-white mb-2">
         Domain-wise Debit/Credit Breakdown
       </h3>
-      <div className="w-[300px] h-[250px] flex justify-center items-center">
-        <Pie data={chartData} options={options} />
+
+      {/* Pie chart wrapper fills remaining height */}
+      <div className="flex-1 w-full flex justify-center items-center">
+        <div className="w-[220px] h-[250px] sm:w-[200px] sm:h-[160px] md:w-[180px] md:h-[140px]">
+          <Pie data={chartData} options={options} />
+        </div>
       </div>
     </div>
   );
