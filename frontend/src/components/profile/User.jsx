@@ -23,7 +23,9 @@ const User = () => {
   const currentIdx = views.indexOf(view);
 
   const handleTouchStart = (e) => {
-    touchStart.current = e.targetTouches[0].clientX;
+    const x = e.targetTouches[0].clientX;
+    touchStart.current = x;
+    touchEnd.current = x; // Reset touchEnd to prevent stale values from previous gestures
   };
 
   const handleTouchMove = (e) => {
@@ -32,8 +34,8 @@ const User = () => {
 
   const handleTouchEnd = () => {
     const distance = touchStart.current - touchEnd.current;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
+    const isLeftSwipe = distance > 70; // Increased threshold to avoid accidental swipes during taps
+    const isRightSwipe = distance < -70;
 
     if (isLeftSwipe && currentIdx < views.length - 1) {
       setView(views[currentIdx + 1]);
