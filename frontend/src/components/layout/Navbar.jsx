@@ -15,7 +15,7 @@ const Navbar = () => {
     }`;
 
   return (
-    <nav className="w-full h-16 flex items-center px-4 sm:px-8 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
+    <nav className="sticky top-0 z-[100] w-full h-16 flex items-center px-4 sm:px-8 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
       {/* Left: Logo + Nav links */}
       <div className="flex items-center gap-5 sm:gap-8 flex-1">
         <NavLink to="/" className="flex items-center shrink-0">
