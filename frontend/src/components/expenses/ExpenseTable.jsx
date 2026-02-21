@@ -1,57 +1,122 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+
+const PAGE_SIZE = 10;
 
 const ExpenseTable = () => {
-  const [expenses, setExpenses] = useState([]);
+  const { currentMonth: expenses, loading } = useSelector((s) => s.expenses);
+  const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    const fetchExpenses = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/expenses/current-month`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setExpenses(res.data);
-      } catch (err) {
-        console.error("Failed to load expenses", err);
-      }
-    };
-    fetchExpenses();
-  }, []);
+  const totalPages = Math.max(1, Math.ceil((expenses?.length || 0) / PAGE_SIZE));
+  const paginated = (expenses || []).slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  // ── Nav button style ──
+  const navBtn = (disabled) =>
+    `w-8 h-8 flex items-center justify-center rounded-lg border-2 text-sm transition-all duration-150
+     ${disabled
+      ? "border-gray-200 text-gray-300 cursor-not-allowed bg-gray-50"
+      : "border-[#4caf50] text-[#2e7d32] hover:bg-[#4caf50] hover:text-white cursor-pointer"}`;
 
   return (
-    <div className="h-full overflow-y-auto w-full rounded-3xl">
-      <table className="h-full min-w-full table-auto border border-gray-200 rounded-md shadow-sm">
-        <thead className="bg-[#4caf50] text-white text-sm">
-          <tr>
-            <th className="p-2 text-left">Date</th>
-            <th className="p-2 text-left">Title</th>
-            <th className="p-2 text-left">Domain</th>
-            <th className="p-2 text-left">Amount</th>
-            <th className="p-2 text-left">Type</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Array.isArray(expenses) && expenses.length > 0 ? (
-            expenses.map((exp) => (
-              <tr key={exp._id} className="border-t text-sm">
-                <td className="p-2">{exp.date.split("T")[0]}</td>
-                <td className="p-2">{exp.title}</td>
-                <td className="p-2">{exp.domain}</td>
-                <td className="p-2">₹{exp.amount}</td>
-                <td className="p-2 capitalize">{exp.type}</td>
-              </tr>
-            ))
-          ) : (
+    <div className="h-full flex flex-col rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-white">
+
+      {/* ── Table area — fills all available space ── */}
+      <div className="flex-1 overflow-y-auto">
+        <table className="w-full table-auto text-sm">
+          <thead className="bg-[#4caf50] text-white sticky top-0 z-10">
             <tr>
-              <td colSpan="5" className="text-center p-4 text-gray-500">
-                No expenses recorded this month.
-              </td>
+              <th className="p-2 text-left">Date</th>
+              <th className="p-2 text-left">Title</th>
+              <th className="p-2 text-left">Domain</th>
+              <th className="p-2 text-left">Amount</th>
+              <th className="p-2 text-left">Type</th>
             </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              Array.from({ length: PAGE_SIZE }).map((_, i) => (
+                <tr key={i} className="border-t animate-pulse">
+                  {Array.from({ length: 5 }).map((_, j) => (
+                    <td key={j} className="p-2">
+                      <div className="h-4 bg-gray-200 rounded w-3/4" />
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : paginated.length > 0 ? (
+              <>
+                {paginated.map((exp, idx) => (
+                  <tr
+                    key={exp._id}
+                    className={`border-t transition-colors duration-100
+                      ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                      hover:bg-green-50`}
+                  >
+                    <td className="p-4 whitespace-nowrap">{exp.date.split("T")[0]}</td>
+                    <td className="p-4">{exp.title}</td>
+                    <td className="p-4 text-gray-500">{exp.domain}</td>
+                    <td className="p-4 font-medium">₹{exp.amount}</td>
+                    <td className={`p-4 capitalize font-medium ${exp.type === "credit" ? "text-green-600" : "text-red-500"}`}>
+                      {exp.type}
+                    </td>
+                  </tr>
+                ))}
+                {/* Ghost rows to fill remaining space */}
+                {Array.from({ length: Math.max(0, PAGE_SIZE - paginated.length) }).map((_, i) => (
+                  <tr key={`ghost-${i}`} className={`border-t ${(paginated.length + i) % 2 === 0 ? "bg-white" : "bg-gray-50"}`}>
+                    <td className="p-4 h-[54px]" colSpan={5} />
+                  </tr>
+                ))}
+              </>
+            ) : (
+              <>
+                <tr>
+                  <td colSpan="5" className="text-center p-6 text-gray-400 text-sm">
+                    No expenses recorded this month.
+                  </td>
+                </tr>
+                {Array.from({ length: PAGE_SIZE - 1 }).map((_, i) => (
+                  <tr key={`ghost-empty-${i}`} className={`border-t ${i % 2 === 0 ? "bg-gray-50" : "bg-white"}`}>
+                    <td className="p-4 h-[54px]" colSpan={5} />
+                  </tr>
+                ))}
+              </>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* ── Always-visible pagination bar ── */}
+      <div className="shrink-0 border-t border-gray-100 bg-white px-4 py-2 flex items-center justify-between gap-3">
+        <button
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          disabled={page <= 1}
+          className={navBtn(page <= 1)}
+          aria-label="Previous page"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <span className="text-xs text-gray-500 font-medium">
+          Page {page} of {totalPages}
+          {expenses?.length > 0 && (
+            <span className="text-gray-400 ml-1">({expenses.length} total)</span>
           )}
-        </tbody>
-      </table>
+        </span>
+
+        <button
+          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+          disabled={page >= totalPages}
+          className={navBtn(page >= totalPages)}
+          aria-label="Next page"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
     </div>
   );
 };

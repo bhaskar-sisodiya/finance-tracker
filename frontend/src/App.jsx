@@ -8,26 +8,22 @@ import Registration from "./components/auth/Registration.jsx";
 import EditProfilePage from "./pages/EditProfilePage.jsx";
 import Stats from "./components/dashboard/Stats.jsx";
 import About from "./pages/About.jsx";
+import ManageExpenses from "./pages/ManageExpenses.jsx";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<HomeRedirector />} />
-      <Route
-        path="/dashboard"
-        element={
-          <PrivateRoute>
-            <Dashboard />
-          </PrivateRoute>
-        }
-      />
+      <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<Registration />} />
       <Route path="/edit-profile" element={<EditProfilePage />} />
       <Route path="/stats" element={<Stats />} />
       <Route path="/about" element={<About />} />
+      <Route path="/manage" element={<PrivateRoute><ManageExpenses /></PrivateRoute>} />
     </Routes>
   );
 };
 
 export default App;
+

@@ -1,88 +1,50 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "../../store/userSlice";
+import { fetchSummary } from "../../store/summarySlice";
+import { fetchCurrentMonthExpenses } from "../../store/expensesSlice";
 import Summary from "./Summary";
 import ExpenseTable from "../expenses/ExpenseTable";
 import ExpenseForm from "../expenses/ExpenseForm";
 
 const User = () => {
-  const [user, setUser] = useState(null);
-  const [summary, setSummary] = useState(null);
-  const [view, setView] = useState("summary"); // "summary" | "form" | "table"
-  const [expenses, setExpenses] = useState([]);
+  const dispatch = useDispatch();
+  const { data: user } = useSelector((s) => s.user);
+  const { data: summary } = useSelector((s) => s.summary);
+  const { currentMonth: expenses } = useSelector((s) => s.expenses);
 
-  const fetchUser = async () => {
-    const token = localStorage.getItem("token");
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await res.json();
-    setUser(data);
-  };
+  const [view, setView] = useState("summary"); // mobile: "summary"|"form"|"table"
+  //  desktop right-panel: "form"|"table"  (defaults to table)
+  const [desktopView, setDesktopView] = useState("table");
 
-  const fetchSummary = async () => {
-    const token = localStorage.getItem("token");
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/user/summary`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    const data = await res.json();
-    setSummary(data);
-  };
-
-  const fetchExpenses = async () => {
-    const token = localStorage.getItem("token");
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/expenses/current-month`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    setExpenses(res.data);
+  const refresh = () => {
+    dispatch(fetchSummary());
+    dispatch(fetchCurrentMonthExpenses());
   };
 
   useEffect(() => {
-    fetchUser();
-    fetchSummary();
-    fetchExpenses();
-  }, []);
+    dispatch(fetchUser());
+    dispatch(fetchSummary());
+    dispatch(fetchCurrentMonthExpenses());
+  }, [dispatch]);
 
   return (
-    <div className="user-main h-[90%] p-3 flex flex-col gap-4">
+    <div className="h-full p-3 flex flex-col gap-4 overflow-hidden">
       {/* ===== Mobile / Tablet 3-button menu ===== */}
-      <div className="flex lg:hidden justify-center mb-4">
+      <div className="flex lg:hidden justify-center">
         <div className="flex gap-2 bg-gray-100 p-2 rounded-lg shadow-md">
-          <button
-            type="button"
-            onClick={() => setView("summary")}
-            aria-pressed={view === "summary"}
-            className={`px-3 py-1 rounded-md font-medium transition ${
-              view === "summary"
-                ? "bg-black text-white"
-                : "bg-white text-black"
-            }`}
-          >
-            Summary
-          </button>
-          <button
-            type="button"
-            onClick={() => setView("form")}
-            aria-pressed={view === "form"}
-            className={`px-3 py-1 rounded-md font-medium transition ${
-              view === "form" ? "bg-black text-white" : "bg-white text-black"
-            }`}
-          >
-            Expense Form
-          </button>
-          <button
-            type="button"
-            onClick={() => setView("table")}
-            aria-pressed={view === "table"}
-            className={`px-3 py-1 rounded-md font-medium transition ${
-              view === "table" ? "bg-black text-white" : "bg-white text-black"
-            }`}
-          >
-            Expense Table
-          </button>
+          {["summary", "form", "table"].map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setView(v)}
+              aria-pressed={view === v}
+              className={`px-3 py-1 rounded-md font-medium capitalize transition ${view === v ? "bg-black text-white" : "bg-white text-black"
+                }`}
+            >
+              {v === "summary" ? "Summary" : v === "form" ? "Expense Form" : "Expense Table"}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -95,12 +57,7 @@ const User = () => {
         )}
         {view === "form" && (
           <div className="mx-auto w-full max-w-3xl">
-            <ExpenseForm
-              onExpenseAdded={() => {
-                fetchSummary();
-                fetchExpenses();
-              }}
-            />
+            <ExpenseForm onExpenseAdded={refresh} />
           </div>
         )}
         {view === "table" && (
@@ -111,25 +68,20 @@ const User = () => {
       </div>
 
       {/* ===== Desktop: 2-column layout ===== */}
-      <div className="hidden lg:flex w-full gap-4 h-[85vh]">
-        <div className="w-[30%] h-full">
+      <div className="hidden lg:flex w-full gap-4 flex-1 overflow-hidden">
+        <div className="w-[30%] h-full overflow-auto">
           <Summary
             summary={summary}
             user={user}
             expenses={expenses}
-            onAddClick={() => setView("form")}
-            onSeeClick={() => setView("table")}
+            view={desktopView}
+            onToggleView={() => setDesktopView((v) => (v === "form" ? "table" : "form"))}
           />
         </div>
 
-        <div className="w-[70%] h-full">
-          {view === "form" ? (
-            <ExpenseForm
-              onExpenseAdded={() => {
-                fetchSummary();
-                fetchExpenses();
-              }}
-            />
+        <div className="w-[70%] h-full overflow-hidden">
+          {desktopView === "form" ? (
+            <ExpenseForm onExpenseAdded={refresh} />
           ) : (
             <ExpenseTable />
           )}

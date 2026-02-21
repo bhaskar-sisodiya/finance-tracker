@@ -11,10 +11,12 @@ const port = process.env.PORT || 3000;
 // Connect to MongoDB Atlas
 connectDB();
 
-// CORS — allow Netlify frontend + local dev
+// CORS — allow both localhost dev and production frontend
 const allowedOrigins = [
-  process.env.FRONTEND_URL || "http://localhost:5173"
-];
+  "http://localhost:5173",
+  "http://localhost:5174", // Vite fallback port
+  process.env.FRONTEND_URL,
+].filter(Boolean); // remove undefined if FRONTEND_URL not set
 
 app.use(
   cors({

@@ -4,9 +4,11 @@ import Navbar from "../layout/Navbar";
 
 const Dashboard = () => {
   return (
-    <div className="main w-full h-screen">
+    <div className="main w-full h-screen flex flex-col">
       <Navbar />
-      <User />
+      <div className="flex-1 overflow-hidden">
+        <User />
+      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const ExpensePieChart = ({ expenses }) => {
+const ExpensePieChart = ({ expenses, containerClassName }) => {
   const [chartData, setChartData] = useState(null);
 
   useEffect(() => {
@@ -74,7 +74,8 @@ const ExpensePieChart = ({ expenses }) => {
 
       {/* Pie chart wrapper fills remaining height */}
       <div className="flex-1 w-full flex justify-center items-center">
-        <div className="w-[220px] h-[250px] sm:w-[200px] sm:h-[160px] md:w-[180px] md:h-[140px]">
+        <div className={containerClassName || "w-[220px] h-[250px] sm:w-[200px] sm:h-[160px] md:w-[180px] md:h-[140px]"}>
+
           <Pie data={chartData} options={options} />
         </div>
       </div>

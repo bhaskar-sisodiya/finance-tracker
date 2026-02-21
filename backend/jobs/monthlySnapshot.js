@@ -27,25 +27,25 @@ export const generateUserSnapshot = async (userId) => {
     return;
   }
 
-  const totalDebit = uncountedExpenses
+  const totalDebit = Number(uncountedExpenses
     .filter((e) => e.type === "debit")
-    .reduce((sum, e) => sum + e.amount, 0);
+    .reduce((sum, e) => sum + e.amount, 0).toFixed(2));
 
-  const totalCredit = uncountedExpenses
+  const totalCredit = Number(uncountedExpenses
     .filter((e) => e.type === "credit")
-    .reduce((sum, e) => sum + e.amount, 0);
+    .reduce((sum, e) => sum + e.amount, 0).toFixed(2));
 
-  const remaining = user.budget + totalCredit - totalDebit;
+  const remaining = Number((user.budget + totalCredit - totalDebit).toFixed(2));
 
   if (remaining > 0) {
-    const offset = Math.min(remaining, user.deficit);
-    user.deficit -= offset;
-    user.savings += remaining - offset;
+    const offset = Number(Math.min(remaining, user.deficit).toFixed(2));
+    user.deficit = Number((user.deficit - offset).toFixed(2));
+    user.savings = Number((user.savings + (remaining - offset)).toFixed(2));
   } else if (remaining < 0) {
     const overspent = Math.abs(remaining);
-    const offset = Math.min(overspent, user.savings);
-    user.savings -= offset;
-    user.deficit += overspent - offset;
+    const offset = Number(Math.min(overspent, user.savings).toFixed(2));
+    user.savings = Number((user.savings - offset).toFixed(2));
+    user.deficit = Number((user.deficit + (overspent - offset)).toFixed(2));
   }
 
   await user.save();

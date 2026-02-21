@@ -1,40 +1,50 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import AuthControls from "../auth/AuthControls";
 
 const Navbar = () => {
   const { isLoggedIn } = useAuth();
 
+  const linkClass = ({ isActive }) =>
+    `relative text-sm sm:text-base font-medium transition-colors duration-150 pb-0.5
+     after:absolute after:bottom-0 after:left-0 after:h-[2px] after:rounded-full after:transition-all after:duration-200
+     ${isActive
+      ? "text-black after:w-full after:bg-black"
+      : "text-gray-500 hover:text-black after:w-0 hover:after:w-full after:bg-black"
+    }`;
+
   return (
-    <div className="navbar w-full h-[10%] flex px-4 sm:px-6">
-  <div className="right font-semibold text-lg sm:text-xl lg:text-2xl w-1/2 h-full p-2 flex gap-4 sm:gap-7 items-center">
-    <Link to="/">
-      <img src="/images/logo.svg" alt="App Logo" className="h-6 sm:h-8 lg:h-10" />
-    </Link>
+    <nav className="w-full h-16 flex items-center px-4 sm:px-8 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
+      {/* Left: Logo + Nav links */}
+      <div className="flex items-center gap-5 sm:gap-8 flex-1">
+        <NavLink to="/" className="flex items-center shrink-0">
+          <img src="/images/logo.svg" alt="App Logo" className="h-6 sm:h-8 lg:h-9" />
+        </NavLink>
 
-    {isLoggedIn && (
-      <Link
-        to="/stats"
-        className="pb-1 border-b-0 hover:border-b-4 hover:border-black transition-all duration-75"
-      >
-        Stats
-      </Link>
-    )}
+        {/* Desktop nav links */}
+        <div className="hidden sm:flex items-center gap-6">
+          {isLoggedIn && (
+            <NavLink to="/stats" className={linkClass}>
+              Stats
+            </NavLink>
+          )}
+          {isLoggedIn && (
+            <NavLink to="/manage" className={linkClass}>
+              Manage
+            </NavLink>
+          )}
+          <NavLink to="/about" className={linkClass}>
+            About
+          </NavLink>
+        </div>
+      </div>
 
-    <Link
-      to="/about"
-      className="pb-1 border-b-0 hover:border-b-4 hover:border-black transition-all duration-75"
-    >
-      About
-    </Link>
-  </div>
-
-  <div className="left font-semibold text-lg sm:text-xl lg:text-2xl w-1/2 h-full p-4 flex justify-end gap-4 sm:gap-7 items-center">
-    <AuthControls />
-  </div>
-</div>
-
+      {/* Right: Auth controls */}
+      <div className="flex items-center gap-3">
+        <AuthControls />
+      </div>
+    </nav>
   );
 };
 
