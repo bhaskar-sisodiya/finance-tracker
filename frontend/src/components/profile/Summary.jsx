@@ -10,6 +10,7 @@ const Summary = ({ summary, user, onToggleView, view, expenses }) => {
   const summaryLoading = useSelector((state) => state.summary.loading);
   const [isHovered, setIsHovered] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [showSavingsInfo, setShowSavingsInfo] = useState(false);
 
   const handleRecalculate = async () => {
     await dispatch(recalculateSummary()).unwrap();
@@ -76,7 +77,23 @@ const Summary = ({ summary, user, onToggleView, view, expenses }) => {
             <div className="space-y-1 text-xs sm:text-sm lg:text-sm">
               <p>Total Balance = ₹{summary?.totalBalance ?? "--"}</p>
               <p>Remaining Balance = ₹{summary?.remainingBalance ?? "--"}</p>
-              <p>Savings = ₹{summary?.savings ?? "--"}</p>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <p>Savings = ₹{summary?.savings ?? "--"}</p>
+                  <button
+                    onClick={() => setShowSavingsInfo(!showSavingsInfo)}
+                    className="flex items-center justify-center w-4 h-4 rounded-full bg-white/20 hover:bg-white/40 text-[10px] font-bold transition"
+                    title="What is this?"
+                  >
+                    i
+                  </button>
+                </div>
+                {showSavingsInfo && (
+                  <p className="text-[10px] sm:text-[11px] text-white/80 italic leading-tight bg-black/10 p-2 rounded-lg border border-white/10">
+                    * the savings include current month's ₹{summary?.remainingBalance} rupees
+                  </p>
+                )}
+              </div>
               <p>Deficit = ₹{summary?.deficit ?? "--"}</p>
             </div>
           </div>
