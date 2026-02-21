@@ -31,8 +31,16 @@ const Summary = ({ summary, user, onToggleView, view, expenses }) => {
             />
             <Link
               to="/edit-profile"
-              className="text-[11px] sm:text-[13px] text-white hover:text-black mt-1"
+              className="mt-2 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 hover:bg-white text-white hover:text-[#4caf50] text-[10px] sm:text-[12px] font-bold transition-all border border-white/30 backdrop-blur-sm shadow-sm group"
             >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3 w-3 transition-transform group-hover:rotate-12"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+              </svg>
               Edit Profile
             </Link>
           </div>

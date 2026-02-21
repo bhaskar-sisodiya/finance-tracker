@@ -21,7 +21,7 @@ const ExpenseTable = () => {
     <div className="h-full flex flex-col rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-white">
 
       {/* ── Table area — fills all available space ── */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto scroll-y-hidden">
         <table className="w-full table-auto text-sm">
           <thead className="bg-[#4caf50] text-white sticky top-0 z-10">
             <tr>

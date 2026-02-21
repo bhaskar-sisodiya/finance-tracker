@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../../store/userSlice";
 import { fetchSummary } from "../../store/summarySlice";
@@ -14,8 +14,33 @@ const User = () => {
   const { currentMonth: expenses } = useSelector((s) => s.expenses);
 
   const [view, setView] = useState("summary"); // mobile: "summary"|"form"|"table"
-  //  desktop right-panel: "form"|"table"  (defaults to table)
   const [desktopView, setDesktopView] = useState("table");
+
+  // Swipe logic
+  const touchStart = useRef(0);
+  const touchEnd = useRef(0);
+  const views = ["summary", "form", "table"];
+  const currentIdx = views.indexOf(view);
+
+  const handleTouchStart = (e) => {
+    touchStart.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEnd.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const distance = touchStart.current - touchEnd.current;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && currentIdx < views.length - 1) {
+      setView(views[currentIdx + 1]);
+    } else if (isRightSwipe && currentIdx > 0) {
+      setView(views[currentIdx - 1]);
+    }
+  };
 
   const refresh = () => {
     dispatch(fetchSummary());
@@ -48,23 +73,33 @@ const User = () => {
         </div>
       </div>
 
-      {/* ===== Mobile/Tablet: show selected panel ===== */}
-      <div className="lg:hidden w-full">
-        {view === "summary" && (
-          <div className="mx-auto w-full max-w-3xl">
-            <Summary summary={summary} user={user} expenses={expenses} />
+      {/* ===== Mobile/Tablet: Swipeable Horizontal Container ===== */}
+      <div
+        className="lg:hidden w-full flex-1 overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div
+          className="flex h-full transition-transform duration-300 ease-out"
+          style={{ transform: `translateX(-${currentIdx * 100}%)` }}
+        >
+          <div className="min-w-full h-full px-1">
+            <div className="mx-auto w-full max-w-3xl h-full">
+              <Summary summary={summary} user={user} expenses={expenses} />
+            </div>
           </div>
-        )}
-        {view === "form" && (
-          <div className="mx-auto w-full max-w-3xl">
-            <ExpenseForm onExpenseAdded={refresh} />
+          <div className="min-w-full h-full px-1">
+            <div className="mx-auto w-full max-w-3xl h-full">
+              <ExpenseForm onExpenseAdded={refresh} />
+            </div>
           </div>
-        )}
-        {view === "table" && (
-          <div className="mx-auto w-full max-w-3xl">
-            <ExpenseTable />
+          <div className="min-w-full h-full px-1">
+            <div className="mx-auto w-full max-w-3xl h-full">
+              <ExpenseTable />
+            </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* ===== Desktop: 2-column layout ===== */}
