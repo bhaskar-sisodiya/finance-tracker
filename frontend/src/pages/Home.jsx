@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 
@@ -48,13 +48,13 @@ const Home = () => {
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={() => navigate("/register")}
+              onClick={() => navigate({ to: "/register" })}
               className="px-8 py-4 bg-[#4caf50] hover:bg-[#388e3c] text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
             >
               Get Started for Free
             </button>
             <button
-              onClick={() => navigate("/about")}
+              onClick={() => navigate({ to: "/about" })}
               className="px-8 py-4 bg-white border-2 border-gray-100 hover:border-[#4caf50] text-gray-700 rounded-2xl font-bold text-lg shadow-sm transition-all"
             >
               Learn More
@@ -105,7 +105,7 @@ const Home = () => {
               Join thousands of users who have taken the first step toward 100% financial clarity.
             </p>
             <button
-              onClick={() => navigate("/register")}
+              onClick={() => navigate({ to: "/register" })}
               className="px-10 py-4 bg-white text-[#2e7d32] rounded-2xl font-bold text-xl hover:bg-green-50 transition-colors shadow-lg"
             >
               Join Us Now

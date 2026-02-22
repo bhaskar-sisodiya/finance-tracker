@@ -63,9 +63,9 @@ const BarChart = ({ year }) => {
             <YAxis />
             <Tooltip formatter={(value, name) => [`₹${value}`, name.charAt(0).toUpperCase() + name.slice(1)]} />
             <Legend verticalAlign="top" align="center" />
-            <Bar dataKey="budget" fill="#3b82f6" name="Budget" opacity={0.6} />
+            <Bar dataKey="budget" fill="#3b82f6" name="Budget" stackId="a" />
+            <Bar dataKey="credit" fill="#10b981" name="Credit" stackId="a" />
             <Bar dataKey="debit" fill="#ef4444" name="Debit" />
-            <Bar dataKey="credit" fill="#10b981" name="Credit" />
           </ReBarChart>
         </ResponsiveContainer>
       </div>

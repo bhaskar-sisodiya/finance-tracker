@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
     "@tailwindcss/vite": "^4.1.7",
+    "@tanstack/react-router": "^1.162.2",
     "axios": "^1.12.2",
     "chart.js": "^4.5.0",
     "react": "^19.1.0",
@@ -19,7 +20,6 @@
     "react-datepicker": "^8.4.0",
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^7.6.2",
     "recharts": "^3.0.0",
     "tailwindcss": "^4.1.7"
   },

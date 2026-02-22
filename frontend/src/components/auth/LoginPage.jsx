@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 
@@ -25,7 +25,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    if (isLoggedIn) navigate("/dashboard");
+    if (isLoggedIn) navigate({ to: "/dashboard" });
   }, [isLoggedIn, navigate]);
 
   const handleChange = (e) => {
@@ -48,7 +48,7 @@ const LoginPage = () => {
       const data = await res.json();
       if (res.ok) {
         login(data.token);
-        navigate("/dashboard");
+        navigate({ to: "/dashboard" });
       } else {
         showToast(data.message || "Login failed", "error");
       }
@@ -61,106 +61,121 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 relative p-2 sm:p-4">
+    <div className="min-h-screen flex items-center justify-center relative p-4 overflow-hidden bg-[#f8fafc]">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-green-100 rounded-full blur-[120px] opacity-60"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-50 rounded-full blur-[120px] opacity-60"></div>
+
       {/* Back to Home Button */}
       <button
-        onClick={() => navigate("/")}
+        onClick={() => navigate({ to: "/" })}
         className="
-          absolute top-2 sm:top-4 md:top-5
-          left-2 sm:left-4 md:left-5
-          bg-gradient-to-r from-green-400 to-green-600
-          text-white font-semibold
-          px-2 sm:px-3 md:px-4
-          py-1 sm:py-1.5 md:py-2
-          rounded-md sm:rounded-lg
-          shadow-md
-          hover:from-green-500 hover:to-green-700
-          hover:scale-105 transition-transform duration-200
-          flex items-center gap-1 sm:gap-2
-          text-xs sm:text-sm md:text-base
+          absolute top-6 left-6
+          bg-white/80 backdrop-blur-md border border-gray-200
+          text-gray-700 font-medium
+          px-4 py-2 rounded-xl
+          shadow-sm hover:shadow-md
+          hover:scale-105 transition-all duration-300
+          flex items-center gap-2 text-sm z-10
         "
       >
-        <span className="text-sm sm:text-base md:text-lg">←</span> Back to Home
+        <span className="text-lg">←</span> Back to Home
       </button>
 
-      {/* Login Form */}
-      <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-md w-full max-w-md flex flex-col">
-        <h2 className="text-xl sm:text-2xl font-bold mb-5 text-center text-green-700">
-          Login to Your Account
-        </h2>
+      {/* Login Card */}
+      <div className="relative group w-full max-w-md">
+        {/* Card Glow */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-green-400 to-green-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000 group-hover:duration-200"></div>
 
-        <form className="flex flex-col gap-4 sm:gap-5" onSubmit={handleSubmit}>
-          <div className="flex flex-col">
-            <label
-              htmlFor="email"
-              className="block mb-1 text-sm sm:text-base font-medium text-gray-700"
-            >
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="you@example.com"
-              className="w-full px-3 py-2 sm:py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-300"
-            />
+        <div className="relative bg-white/90 backdrop-blur-xl p-8 sm:p-10 rounded-2xl shadow-xl border border-white/20 flex flex-col">
+          <div className="mb-8 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
+            <p className="text-gray-500 text-sm">Please enter your details to sign in</p>
           </div>
 
-          <div className="flex flex-col">
-            <label
-              htmlFor="password"
-              className="block mb-1 text-sm sm:text-base font-medium text-gray-700"
-            >
-              Password
-            </label>
-            <div className="relative">
+          <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+            <div className="space-y-1">
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 ml-1">
+                Email Address
+              </label>
               <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formData.password}
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
-                placeholder="••••••••"
-                className="w-full px-3 py-2 sm:py-2.5 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-300"
+                placeholder="you@example.com"
+                required
+                className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400"
               />
+            </div>
+
+            <div className="space-y-1">
+              <label htmlFor="password" name="password" className="block text-sm font-semibold text-gray-700 ml-1">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  required
+                  className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all duration-200 text-gray-900 placeholder:text-gray-400"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none p-1 transition-colors"
+                  tabIndex={-1}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  <EyeIcon open={showPassword} />
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full mt-2 bg-gradient-to-r from-green-600 to-green-500 text-white py-3.5 rounded-xl font-bold shadow-lg shadow-green-200 hover:shadow-xl hover:shadow-green-300 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-3 text-base"
+            >
+              {isLoading ? (
+                <>
+                  <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                  </svg>
+                  <span>Logging in...</span>
+                </>
+              ) : (
+                "Sign In"
+              )}
+            </button>
+
+            <div className="relative my-2">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-100"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white/0 text-gray-400">or</span>
+              </div>
+            </div>
+
+            <p className="text-sm text-center text-gray-600">
+              Don't have an account?{" "}
               <button
                 type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 focus:outline-none"
-                tabIndex={-1}
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                onClick={() => navigate({ to: "/register" })}
+                className="text-green-600 font-bold hover:text-green-700 hover:underline transition-colors"
               >
-                <EyeIcon open={showPassword} />
+                Create one now
               </button>
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-gradient-to-r from-green-500 to-green-700 text-white py-2 sm:py-2.5 rounded-md font-semibold hover:from-green-600 hover:to-green-800 transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          >
-            {isLoading && (
-              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-              </svg>
-            )}
-            {isLoading ? "Logging in…" : "Log In"}
-          </button>
-
-          <p className="text-sm sm:text-base text-center mt-3 text-gray-600">
-            New here?{" "}
-            <span
-              onClick={() => navigate("/register")}
-              className="text-green-600 cursor-pointer hover:underline"
-            >
-              Create an account
-            </span>
-          </p>
-        </form>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );

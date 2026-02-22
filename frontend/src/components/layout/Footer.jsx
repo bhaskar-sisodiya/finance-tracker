@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 
 const Footer = () => {
   return (
@@ -10,7 +10,6 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
               <img src="/images/logo.svg" alt="Pocket Tracker" className="h-8 w-auto" />
-              <span className="text-xl font-bold text-gray-900 tracking-tight">Pocket Tracker</span>
             </Link>
             <p className="text-gray-500 text-sm leading-relaxed mb-6">
               Empowering your financial journey with precision tracking and intelligent insights.

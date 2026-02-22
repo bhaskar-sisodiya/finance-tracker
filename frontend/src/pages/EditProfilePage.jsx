@@ -27,7 +27,7 @@ const EditProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#4caf50]/10 flex items-center justify-center">
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center py-12 px-4 overflow-y-auto">
       <EditProfile
         user={user}
         onUpdate={fetchUser} // optional: re-fetch after editing

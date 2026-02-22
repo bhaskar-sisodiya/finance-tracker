@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { useAuth } from "../../context/AuthContext";
 import AuthControls from "../auth/AuthControls";
 
@@ -18,25 +18,25 @@ const Navbar = () => {
     <nav className="sticky top-0 z-[100] w-full h-16 flex items-center px-4 sm:px-8 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
       {/* Left: Logo + Nav links */}
       <div className="flex items-center gap-5 sm:gap-8 flex-1">
-        <NavLink to="/" className="flex items-center shrink-0">
+        <Link to="/" className="flex items-center shrink-0">
           <img src="/images/logo.svg" alt="App Logo" className="h-6 sm:h-8 lg:h-9" />
-        </NavLink>
+        </Link>
 
         {/* Desktop nav links */}
         <div className="hidden sm:flex items-center gap-6">
           {isLoggedIn && (
-            <NavLink to="/stats" className={linkClass}>
+            <Link to="/stats" className={linkClass}>
               Stats
-            </NavLink>
+            </Link>
           )}
           {isLoggedIn && (
-            <NavLink to="/manage" className={linkClass}>
+            <Link to="/manage" className={linkClass}>
               Manage
-            </NavLink>
+            </Link>
           )}
-          <NavLink to="/about" className={linkClass}>
+          <Link to="/about" className={linkClass}>
             About
-          </NavLink>
+          </Link>
         </div>
       </div>
 

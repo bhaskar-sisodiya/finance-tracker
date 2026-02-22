@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../../context/AuthContext";
 
 // ─── Animated Hamburger → X icon ─────────────────────────────────────────────
@@ -23,7 +23,7 @@ const HamburgerIcon = ({ open }) => (
 
 // ─── Reusable mobile menu link ────────────────────────────────────────────────
 const MobileMenuLink = ({ to, children, onClick }) => (
-  <NavLink
+  <Link
     to={to}
     onClick={onClick}
     className={({ isActive }) =>
@@ -32,7 +32,7 @@ const MobileMenuLink = ({ to, children, onClick }) => (
     }
   >
     {children}
-  </NavLink>
+  </Link>
 );
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -56,7 +56,7 @@ const AuthControls = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    navigate({ to: "/" });
     close();
     setConfirmOpen(false);
   };
@@ -114,8 +114,8 @@ const AuthControls = () => {
           <button onClick={requestLogout} className={btnOutline}>Logout</button>
         ) : (
           <>
-            <button onClick={() => navigate("/login")} className={btnOutline}>Log In</button>
-            <button onClick={() => navigate("/register")} className={btnFilled}>Get Started</button>
+            <button onClick={() => navigate({ to: "/login" })} className={btnOutline}>Log In</button>
+            <button onClick={() => navigate({ to: "/register" })} className={btnFilled}>Get Started</button>
           </>
         )}
       </div>

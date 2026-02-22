@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import { useDispatch, useSelector } from "react-redux";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -154,12 +154,15 @@ const ManageExpenses = () => {
     const [deleteTarget, setDeleteTarget] = useState(null);
     const [deleting, setDeleting] = useState(false);
 
+    // Sorting
+    const [sortConfig, setSortConfig] = useState({ key: "date", direction: "desc" });
+
     // ── Initial load ──
     useEffect(() => { dispatch(fetchAllExpenses()); }, [dispatch]);
 
-    // ── Client-side filtering ──
+    // ── Client-side filtering & sorting ──
     const filtered = useMemo(() => {
-        return allExpenses.filter((exp) => {
+        let result = allExpenses.filter((exp) => {
             if (type !== "all" && exp.type !== type) return false;
             if (domain !== "all" && exp.domain !== domain) return false;
             if (from && new Date(exp.date) < from) return false;
@@ -170,10 +173,38 @@ const ManageExpenses = () => {
             }
             return true;
         });
-    }, [allExpenses, search, type, domain, from, to]);
 
-    // Reset to page 1 whenever filters change
-    useEffect(() => { setPage(1); }, [search, type, domain, from, to]);
+        // Apply sorting
+        result.sort((a, b) => {
+            if (sortConfig.key === "date") {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return sortConfig.direction === "asc" ? dateA - dateB : dateB - dateA;
+            }
+            if (sortConfig.key === "amount") {
+                return sortConfig.direction === "asc" ? a.amount - b.amount : b.amount - a.amount;
+            }
+            return 0;
+        });
+
+        return result;
+    }, [allExpenses, search, type, domain, from, to, sortConfig]);
+
+    const requestSort = (key) => {
+        let direction = "asc";
+        if (sortConfig.key === key && sortConfig.direction === "asc") {
+            direction = "desc";
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const SortIcon = ({ column }) => {
+        if (sortConfig.key !== column) return <span className="ml-1 opacity-20">↕</span>;
+        return <span className="ml-1">{sortConfig.direction === "asc" ? "↑" : "↓"}</span>;
+    };
+
+    // Reset to page 1 whenever filters or sort changes
+    useEffect(() => { setPage(1); }, [search, type, domain, from, to, sortConfig]);
 
     const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
     const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -231,7 +262,7 @@ const ManageExpenses = () => {
 
                 {/* Header */}
                 <div className="flex items-center gap-3">
-                    <button onClick={() => navigate("/dashboard")} aria-label="Back"
+                    <button onClick={() => navigate({ to: "/dashboard" })} aria-label="Back"
                         className="w-9 h-9 shrink-0 flex items-center justify-center rounded-full bg-white border-2 border-[#4caf50] text-[#2e7d32] hover:bg-[#4caf50] hover:text-white shadow-sm transition hover:scale-110 active:scale-95">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -307,11 +338,24 @@ const ManageExpenses = () => {
                                 <table className="w-full text-sm">
                                     <thead className="bg-gray-50 border-b border-gray-100">
                                         <tr>
-                                            <th className="px-4 py-3 text-left">
+                                            <th className="px-4 py-3 text-left w-10">
                                                 <input type="checkbox" checked={isAllSelected} onChange={toggleAll} className="accent-[#4caf50] w-4 h-4 cursor-pointer" />
                                             </th>
                                             {["Date", "Title", "Domain", "Type", "Amount", "Actions"].map(h => (
-                                                <th key={h} className={`px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide ${h === "Amount" ? "text-right" : h === "Actions" ? "text-center" : "text-left"} ${h === "Domain" ? "hidden md:table-cell" : ""}`}>{h}</th>
+                                                <th
+                                                    key={h}
+                                                    onClick={() => (h === "Date" || h === "Amount") ? requestSort(h.toLowerCase()) : null}
+                                                    className={`px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide 
+                                                        ${h === "Amount" ? "text-right" : h === "Actions" ? "text-center" : "text-left"} 
+                                                        ${h === "Domain" ? "hidden md:table-cell" : ""}
+                                                        ${(h === "Date" || h === "Amount") ? "cursor-pointer hover:text-[#2e7d32] transition-colors" : ""}
+                                                    `}
+                                                >
+                                                    <div className={`flex items-center ${h === "Amount" ? "justify-end" : h === "Actions" ? "justify-center" : "justify-start"}`}>
+                                                        {h}
+                                                        {(h === "Date" || h === "Amount") && <SortIcon column={h.toLowerCase()} />}
+                                                    </div>
+                                                </th>
                                             ))}
                                         </tr>
                                     </thead>

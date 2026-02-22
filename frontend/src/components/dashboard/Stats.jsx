@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import Navbar from "../layout/Navbar";
 import LineChart from "../charts/LineChart";
 import BarChart from "../charts/BarChart";
@@ -21,7 +21,7 @@ const Stats = () => {
         {/* Header bar — back button + title in their own row */}
         <div className="flex items-center gap-3 px-4 py-4 border-b border-[#c8e6c9] bg-white/60">
           <button
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate({ to: "/dashboard" })}
             aria-label="Go back"
             className="
               w-9 h-9 shrink-0 flex items-center justify-center

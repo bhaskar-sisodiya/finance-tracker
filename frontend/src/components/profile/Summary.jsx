@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { recalculateSummary } from "../../store/summarySlice";
 import { fetchUser } from "../../store/userSlice";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import ExpensePieChart from "../charts/ExpensePieChart";
 
 const Summary = ({ summary, user, onToggleView, view, expenses }) => {

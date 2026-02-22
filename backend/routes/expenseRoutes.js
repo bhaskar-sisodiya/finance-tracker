@@ -5,6 +5,7 @@ import {
   getMonthlyTrend,
   getYearlySummary,
 } from "../controllers/chartController.js";
+import { generateUserSnapshot, forceSyncMonth } from "../jobs/monthlySnapshot.js";
 
 const router = express.Router();
 
@@ -54,11 +55,11 @@ router.get("/", protect, async (req, res) => {
     if (from || to) {
       filter.date = {};
       if (from) filter.date.$gte = new Date(from);
-      if (to)   filter.date.$lte = new Date(to + "T23:59:59");
+      if (to) filter.date.$lte = new Date(to + "T23:59:59");
     }
     if (search) {
       filter.$or = [
-        { title:       { $regex: search, $options: "i" } },
+        { title: { $regex: search, $options: "i" } },
         { description: { $regex: search, $options: "i" } },
       ];
     }
@@ -78,10 +79,28 @@ router.delete("/bulk", protect, async (req, res) => {
     if (!Array.isArray(ids) || ids.length === 0)
       return res.status(400).json({ error: "No IDs provided." });
 
+    // Step A: Find the expenses we're about to delete to identify affected months
+    const expensesToDelete = await Expense.find({
+      _id: { $in: ids },
+      user: req.user.id
+    });
+
+    // Step B: Actually delete them
     const result = await Expense.deleteMany({
       _id: { $in: ids },
-      user: req.user.id, // safety: only delete user's own records
+      user: req.user.id
     });
+
+    // Step C: Identify unique months affected for re-sync
+    const monthsAffected = [...new Set(expensesToDelete.map(exp => {
+      const d = new Date(exp.date);
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    }))];
+
+    for (const m of monthsAffected) {
+      await forceSyncMonth(req.user.id, m);
+    }
+
     res.json({ message: `${result.deletedCount} expense(s) deleted.` });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -92,7 +111,7 @@ router.delete("/bulk", protect, async (req, res) => {
 router.put("/:id", protect, async (req, res) => {
   try {
     const { date, domain, title, description, amount, type } = req.body;
-    const updateData = { ...(date && { date: new Date(date) }), domain, title, description, type };
+    const updateData = { ...(date && { date: new Date(date) }), domain, title, description, type, counted: false };
     if (amount !== undefined) {
       updateData.amount = Number(Number(amount).toFixed(2));
     }
@@ -102,6 +121,10 @@ router.put("/:id", protect, async (req, res) => {
       { new: true, runValidators: true }
     );
     if (!expense) return res.status(404).json({ error: "Expense not found." });
+
+    // Trigger re-sync for the month (it will pick up 'counted: false' record)
+    await generateUserSnapshot(req.user.id);
+
     res.json({ message: "Expense updated", expense });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -111,11 +134,21 @@ router.put("/:id", protect, async (req, res) => {
 // ── DELETE /:id — delete a single expense ───────────────────────────────────
 router.delete("/:id", protect, async (req, res) => {
   try {
-    const expense = await Expense.findOneAndDelete({
+    const expense = await Expense.findOne({
       _id: req.params.id,
       user: req.user.id,
     });
+
     if (!expense) return res.status(404).json({ error: "Expense not found." });
+
+    const d = new Date(expense.date);
+    const monthLabel = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+
+    await Expense.deleteOne({ _id: expense._id });
+
+    // Force re-sync for this month since the record is gone
+    await forceSyncMonth(req.user.id, monthLabel);
+
     res.json({ message: "Expense deleted." });
   } catch (err) {
     res.status(500).json({ error: err.message });

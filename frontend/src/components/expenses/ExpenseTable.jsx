@@ -25,11 +25,11 @@ const ExpenseTable = () => {
         <table className="w-full table-auto text-sm">
           <thead className="bg-[#4caf50] text-white sticky top-0 z-10">
             <tr>
-              <th className="p-2 text-left">Date</th>
-              <th className="p-2 text-left">Title</th>
-              <th className="p-2 text-left">Domain</th>
-              <th className="p-2 text-left">Amount</th>
-              <th className="p-2 text-left">Type</th>
+              <th className="p-3 text-center">Date</th>
+              <th className="p-3 text-center">Title</th>
+              <th className="p-3 text-center">Domain</th>
+              <th className="p-3 text-center">Amount</th>
+              <th className="p-3 text-center">Type</th>
             </tr>
           </thead>
           <tbody>
@@ -37,8 +37,8 @@ const ExpenseTable = () => {
               Array.from({ length: PAGE_SIZE }).map((_, i) => (
                 <tr key={i} className="border-t animate-pulse">
                   {Array.from({ length: 5 }).map((_, j) => (
-                    <td key={j} className="p-2">
-                      <div className="h-4 bg-gray-200 rounded w-3/4" />
+                    <td key={j} className="p-2 text-center">
+                      <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto" />
                     </td>
                   ))}
                 </tr>
@@ -52,11 +52,11 @@ const ExpenseTable = () => {
                       ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
                       hover:bg-green-50`}
                   >
-                    <td className="p-4 whitespace-nowrap">{exp.date.split("T")[0]}</td>
-                    <td className="p-4">{exp.title}</td>
-                    <td className="p-4 text-gray-500">{exp.domain}</td>
-                    <td className="p-4 font-medium">₹{exp.amount}</td>
-                    <td className={`p-4 capitalize font-medium ${exp.type === "credit" ? "text-green-600" : "text-red-500"}`}>
+                    <td className="p-4 whitespace-nowrap text-center">{exp.date.split("T")[0]}</td>
+                    <td className="p-4 text-center">{exp.title}</td>
+                    <td className="p-4 text-gray-500 text-center">{exp.domain}</td>
+                    <td className="p-4 font-medium text-center">₹{exp.amount}</td>
+                    <td className={`p-4 capitalize font-medium text-center ${exp.type === "credit" ? "text-green-600" : "text-red-500"}`}>
                       {exp.type}
                     </td>
                   </tr>

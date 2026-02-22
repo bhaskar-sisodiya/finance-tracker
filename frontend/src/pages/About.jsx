@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import Navbar from "../components/layout/Navbar";
 
 const features = [
@@ -33,6 +33,11 @@ const features = [
     title: "Built for Speed",
     desc: "Client-side caching with Redux means navigation is instant — no repeated network calls as you browse pages.",
   },
+  {
+    icon: "🛣️",
+    title: "Type-Safe Routing",
+    desc: "Powered by TanStack Router for ultra-fast, type-safe navigation and robust route guards.",
+  },
 ];
 
 const stack = [
@@ -43,6 +48,7 @@ const stack = [
   { name: "Redux Toolkit", color: "bg-purple-100 text-purple-700", label: "State" },
   { name: "TailwindCSS", color: "bg-cyan-100 text-cyan-700", label: "Styling" },
   { name: "JWT", color: "bg-yellow-100 text-yellow-700", label: "Auth" },
+  { name: "TanStack Router", color: "bg-orange-100 text-orange-700", label: "Routing" },
   { name: "Recharts", color: "bg-pink-100 text-pink-700", label: "Charts" },
 ];
 
@@ -58,7 +64,7 @@ const About = () => {
         {/* ── Back + Header ── */}
         <div className="flex items-start gap-4">
           <button
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate({ to: "/dashboard" })}
             aria-label="Back to dashboard"
             className="mt-1 w-9 h-9 shrink-0 flex items-center justify-center rounded-full bg-white border-2 border-[#4caf50] text-[#2e7d32] hover:bg-[#4caf50] hover:text-white shadow-sm transition hover:scale-110 active:scale-95"
           >

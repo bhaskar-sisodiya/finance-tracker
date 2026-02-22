@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 
 const Body = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const Body = () => {
           </p>
         </div>
         <button
-          onClick={() => navigate("/register")}
+          onClick={() => navigate({ to: "/register" })}
           className="mt-6 px-6 py-3 text-lg sm:text-xl lg:text-2xl font-bold rounded-md border-2 bg-black hover:bg-white text-white hover:text-black transition-all duration-150"
         >
           Register Now
