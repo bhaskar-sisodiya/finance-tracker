@@ -18,7 +18,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     }
 
     const btnBase =
-        "w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-150";
+        "w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-150 hover:scale-110 active:scale-90 shadow-sm";
 
     return (
         <div className="flex items-center justify-center gap-1 py-3">
@@ -45,8 +45,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                         key={p}
                         onClick={() => onPageChange(p)}
                         className={`${btnBase} ${p === currentPage
-                                ? "bg-[#4caf50] text-white border border-[#4caf50] shadow-sm"
-                                : "border border-gray-200 text-gray-600 hover:bg-[#e8f5e9] hover:text-[#2e7d32] hover:border-[#4caf50]"
+                            ? "bg-[#4caf50] text-white border border-[#4caf50] shadow-sm"
+                            : "border border-gray-200 text-gray-600 hover:bg-[#e8f5e9] hover:text-[#2e7d32] hover:border-[#4caf50]"
                             }`}
                     >
                         {p}

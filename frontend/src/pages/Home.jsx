@@ -49,13 +49,13 @@ const Home = () => {
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => navigate({ to: "/register" })}
-              className="px-8 py-4 bg-[#4caf50] hover:bg-[#388e3c] text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+              className="px-8 py-4 bg-[#4caf50] hover:bg-[#388e3c] text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
             >
               Get Started for Free
             </button>
             <button
               onClick={() => navigate({ to: "/about" })}
-              className="px-8 py-4 bg-white border-2 border-gray-100 hover:border-[#4caf50] text-gray-700 rounded-2xl font-bold text-lg shadow-sm transition-all"
+              className="px-8 py-4 bg-white border-2 border-gray-100 hover:border-[#4caf50] text-gray-700 rounded-2xl font-bold text-lg shadow-sm transition-all hover:scale-105 active:scale-95"
             >
               Learn More
             </button>
@@ -84,7 +84,7 @@ const Home = () => {
               {features.map((feature, idx) => (
                 <div
                   key={idx}
-                  className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group"
+                  className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-all hover:scale-105 group cursor-default"
                 >
                   <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
                     {feature.icon}
@@ -106,7 +106,7 @@ const Home = () => {
             </p>
             <button
               onClick={() => navigate({ to: "/register" })}
-              className="px-10 py-4 bg-white text-[#2e7d32] rounded-2xl font-bold text-xl hover:bg-green-50 transition-colors shadow-lg"
+              className="px-10 py-4 bg-white text-[#2e7d32] rounded-2xl font-bold text-xl hover:bg-green-50 transition-all hover:scale-105 active:scale-95 shadow-lg"
             >
               Join Us Now
             </button>

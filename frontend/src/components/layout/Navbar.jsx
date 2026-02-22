@@ -6,13 +6,9 @@ import AuthControls from "../auth/AuthControls";
 const Navbar = () => {
   const { isLoggedIn } = useAuth();
 
-  const linkClass = ({ isActive }) =>
-    `relative text-sm sm:text-base font-medium transition-colors duration-150 pb-0.5
-     after:absolute after:bottom-0 after:left-0 after:h-[2px] after:rounded-full after:transition-all after:duration-200
-     ${isActive
-      ? "text-black after:w-full after:bg-black"
-      : "text-gray-500 hover:text-black after:w-0 hover:after:w-full after:bg-black"
-    }`;
+  const activeLinkClass = "text-[#4caf50]";
+  const inactiveLinkClass = "text-gray-500 hover:text-[#4caf50]";
+  const underlineBase = "absolute bottom-0 left-0 w-full h-[3px] bg-[#4caf50] transition-transform duration-300 origin-center";
 
   return (
     <nav className="sticky top-0 z-[100] w-full h-16 flex items-center px-4 sm:px-8 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
@@ -25,17 +21,56 @@ const Navbar = () => {
         {/* Desktop nav links */}
         <div className="hidden sm:flex items-center gap-6">
           {isLoggedIn && (
-            <Link to="/stats" className={linkClass}>
-              Stats
+            <Link
+              to="/stats"
+              className={({ isActive }) =>
+                `group relative text-sm font-bold pb-1.5 transition-colors ${isActive ? activeLinkClass : inactiveLinkClass}`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  Stats
+                  <span
+                    className={`${underlineBase} ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                      }`}
+                  />
+                </>
+              )}
             </Link>
           )}
           {isLoggedIn && (
-            <Link to="/manage" className={linkClass}>
-              Manage
+            <Link
+              to="/manage"
+              className={({ isActive }) =>
+                `group relative text-sm font-bold pb-1.5 transition-colors ${isActive ? activeLinkClass : inactiveLinkClass}`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  Manage
+                  <span
+                    className={`${underlineBase} ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                      }`}
+                  />
+                </>
+              )}
             </Link>
           )}
-          <Link to="/about" className={linkClass}>
-            About
+          <Link
+            to="/about"
+            className={({ isActive }) =>
+              `group relative text-sm font-bold pb-1.5 transition-colors ${isActive ? activeLinkClass : inactiveLinkClass}`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                About
+                <span
+                  className={`${underlineBase} ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                    }`}
+                />
+              </>
+            )}
           </Link>
         </div>
       </div>

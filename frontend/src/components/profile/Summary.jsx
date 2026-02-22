@@ -31,7 +31,7 @@ const Summary = ({ summary, user, onToggleView, view, expenses }) => {
             />
             <Link
               to="/edit-profile"
-              className="mt-2 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 hover:bg-white text-white hover:text-[#4caf50] text-[10px] sm:text-[12px] font-bold transition-all border border-white/30 backdrop-blur-sm shadow-sm group"
+              className="mt-2 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 hover:bg-white text-white hover:text-[#4caf50] text-[10px] sm:text-[12px] font-bold transition-all border border-white/30 backdrop-blur-sm shadow-sm group hover:scale-105 active:scale-95"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +65,7 @@ const Summary = ({ summary, user, onToggleView, view, expenses }) => {
                 onClick={handleRecalculate}
                 disabled={summaryLoading}
                 title="Recalculate Till Date"
-                className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition disabled:opacity-50"
+                className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-all hover:scale-110 active:rotate-12 disabled:opacity-50 disabled:hover:scale-100"
               >
                 <svg
                   className={`w-4 h-4 text-white ${summaryLoading ? "animate-spin" : ""}`}
@@ -111,7 +111,7 @@ const Summary = ({ summary, user, onToggleView, view, expenses }) => {
             <button
               onClick={onToggleView}
               type="button"
-              className="flex items-center gap-2 pt-2 pb-2 px-6 text-[#22a127] hover:text-white bg-white hover:bg-[#007d04] rounded-3xl transition font-medium"
+              className="flex items-center gap-2 pt-2 pb-2 px-6 text-[#22a127] hover:text-white bg-white hover:bg-[#007d04] rounded-3xl transition-all font-medium hover:scale-105 active:scale-95 shadow-sm hover:shadow-md"
             >
               {view === "form" ? (
                 <>

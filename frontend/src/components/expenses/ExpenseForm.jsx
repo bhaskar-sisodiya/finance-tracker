@@ -237,12 +237,12 @@ const ExpenseForm = ({ onExpenseAdded }) => {
               ].map(({ value, label, icon, color }) => (
                 <label
                   key={value}
-                  className={`flex items-center gap-2 border-2 rounded-xl px-3 py-1.5 cursor-pointer transition-all text-sm font-medium
+                  className={`flex items-center gap-2 border-2 rounded-xl px-3 py-1.5 cursor-pointer transition-all text-sm font-medium hover:scale-[1.02] active:scale-[0.98]
                     ${form.transactionType === value
                       ? color === "red"
                         ? "border-red-400 bg-red-50 text-red-700"
                         : "border-[#4caf50] bg-green-50 text-[#2e7d32]"
-                      : "border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300"
+                      : "border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300 shadow-sm"
                     }`}
                 >
                   <input
@@ -354,14 +354,14 @@ const ExpenseForm = ({ onExpenseAdded }) => {
             <button
               type="button"
               onClick={resetForm}
-              className="flex-1 border border-gray-200 text-gray-500 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 transition"
+              className="flex-1 border border-gray-200 text-gray-500 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 transition-all hover:scale-105 active:scale-95"
             >
               Clear
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-2 w-full bg-[#4caf50] hover:bg-[#388e3c] text-white py-2 rounded-xl text-sm font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-2 w-full bg-[#4caf50] hover:bg-[#388e3c] text-white py-2 rounded-xl text-sm font-semibold transition-all hover:scale-105 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
             >
               {isLoading ? <><Spinner /> Submitting…</> : "Submit"}
             </button>

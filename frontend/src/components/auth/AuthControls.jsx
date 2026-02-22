@@ -27,7 +27,7 @@ const MobileMenuLink = ({ to, children, onClick }) => (
     to={to}
     onClick={onClick}
     className={({ isActive }) =>
-      `block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors
+      `block px-4 py-2.5 text-sm font-medium rounded-lg transition-all hover:scale-[1.02] active:scale-[0.98]
        ${isActive ? "bg-[#4caf50] text-white" : "text-gray-700 hover:bg-gray-100"}`
     }
   >
@@ -66,9 +66,9 @@ const AuthControls = () => {
     setConfirmOpen(true);
   };
 
-  const btnBase = "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-150 border-2";
-  const btnOutline = `${btnBase} border-black text-black hover:bg-black hover:text-white`;
-  const btnFilled = `${btnBase} border-black bg-black text-white hover:bg-white hover:text-black`;
+  const btnBase = "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-150 border-2 hover:scale-105 active:scale-95";
+  const btnOutline = `${btnBase} border-black text-black hover:bg-black hover:text-white shadow-sm hover:shadow-md`;
+  const btnFilled = `${btnBase} border-black bg-black text-white hover:bg-white hover:text-black shadow-md hover:shadow-lg`;
 
   return (
     <>
@@ -155,7 +155,7 @@ const AuthControls = () => {
             {isLoggedIn ? (
               <button
                 onClick={requestLogout}
-                className="w-full text-left px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                className="w-full text-left px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 🚪 Logout
               </button>

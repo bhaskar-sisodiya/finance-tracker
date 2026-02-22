@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "@tanstack/react-router";
 
 const Footer = () => {
+  const underlineBase = "absolute bottom-0 left-0 w-full h-[1.5px] bg-[#4caf50] transition-transform duration-300 origin-center scale-x-0 group-hover:scale-x-100";
+  const footerLinkClass = "group relative inline-block text-gray-500 hover:text-[#4caf50] text-sm transition-all duration-300 pb-0.5";
+
   return (
     <footer className="bg-white border-t border-gray-100 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -20,9 +23,9 @@ const Footer = () => {
           <div>
             <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Product</h3>
             <ul className="space-y-3">
-              <li><Link to="/manage" className="text-gray-500 hover:text-[#4caf50] text-sm transition-colors">Manage Expenses</Link></li>
-              <li><Link to="/stats" className="text-gray-500 hover:text-[#4caf50] text-sm transition-colors">Analytics</Link></li>
-              <li><Link to="/about" className="text-gray-500 hover:text-[#4caf50] text-sm transition-colors">About Us</Link></li>
+              <li><Link to="/manage" className={footerLinkClass}>Manage Expenses <span className={underlineBase} /></Link></li>
+              <li><Link to="/stats" className={footerLinkClass}>Analytics <span className={underlineBase} /></Link></li>
+              <li><Link to="/about" className={footerLinkClass}>About Us <span className={underlineBase} /></Link></li>
             </ul>
           </div>
 
@@ -30,9 +33,9 @@ const Footer = () => {
           <div>
             <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Support</h3>
             <ul className="space-y-3">
-              <li><a href="https://github.com/bhaskar-sisodiya/finance-tracker/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-[#4caf50] text-sm transition-colors">GitHub</a></li>
-              <li><a href="https://mail.google.com/mail/?view=cm&to=sisodiyabhaskar@gmail.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-[#4caf50] text-sm transition-colors">Contact Support</a></li>
-              <li><Link to="#" className="text-gray-500 hover:text-[#4caf50] text-sm transition-colors">Privacy Policy</Link></li>
+              <li><a href="https://github.com/bhaskar-sisodiya/finance-tracker/" target="_blank" rel="noopener noreferrer" className={footerLinkClass}>GitHub <span className={underlineBase} /></a></li>
+              <li><a href="https://mail.google.com/mail/?view=cm&to=sisodiyabhaskar@gmail.com" target="_blank" rel="noopener noreferrer" className={footerLinkClass}>Contact Support <span className={underlineBase} /></a></li>
+              <li><Link to="#" className={footerLinkClass}>Privacy Policy <span className={underlineBase} /></Link></li>
             </ul>
           </div>
 

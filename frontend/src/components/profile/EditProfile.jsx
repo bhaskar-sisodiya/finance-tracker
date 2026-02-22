@@ -133,7 +133,7 @@ const EditProfile = ({ user, onClose, onUpdate }) => {
             {!isEditing && (
               <button
                 onClick={() => setIsEditing(true)}
-                className="text-sm font-bold text-green-600 hover:text-green-700 flex items-center gap-1 transition-colors"
+                className="text-sm font-bold text-green-600 hover:text-green-700 flex items-center gap-1 transition-all hover:scale-105 active:scale-95"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -249,7 +249,7 @@ const EditProfile = ({ user, onClose, onUpdate }) => {
                       key={avatar}
                       src={avatar}
                       alt="Avatar"
-                      className={`h-12 w-12 rounded-full cursor-pointer border-2 transition-all ${form.profilePic === avatar
+                      className={`h-12 w-12 rounded-full cursor-pointer border-2 transition-all hover:scale-110 active:scale-90 ${form.profilePic === avatar
                         ? "border-green-500 scale-110 shadow-md"
                         : "border-transparent opacity-70 hover:opacity-100"
                         }`}
@@ -263,14 +263,14 @@ const EditProfile = ({ user, onClose, onUpdate }) => {
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition"
+                  className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition-all hover:scale-105 active:scale-95"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="bg-green-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-green-700 transition shadow-lg shadow-green-100 flex items-center gap-2 disabled:opacity-60"
+                  className="bg-green-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-green-700 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-green-100 flex items-center gap-2 disabled:opacity-60 disabled:hover:scale-100"
                 >
                   {isLoading && (
                     <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">

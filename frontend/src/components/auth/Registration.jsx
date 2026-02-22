@@ -76,7 +76,7 @@ const Registration = () => {
           text-gray-700 font-medium
           px-4 py-2 rounded-xl
           shadow-sm hover:shadow-md
-          hover:scale-105 transition-all duration-300
+          hover:scale-110 active:scale-95 transition-all duration-300
           flex items-center gap-2 text-sm z-10
         "
       >
@@ -173,7 +173,7 @@ const Registration = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-2 bg-gradient-to-r from-green-600 to-green-500 text-white py-3.5 rounded-xl font-bold shadow-lg shadow-green-200 hover:shadow-xl hover:shadow-green-300 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-3 text-base"
+              className="w-full mt-2 bg-gradient-to-r from-green-600 to-green-500 text-white py-3.5 rounded-xl font-bold shadow-lg shadow-green-200 hover:shadow-xl hover:shadow-green-300 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3 text-base"
             >
               {isLoading ? (
                 <>
@@ -202,9 +202,10 @@ const Registration = () => {
               <button
                 type="button"
                 onClick={() => navigate({ to: "/login" })}
-                className="text-green-600 font-bold hover:text-green-700 hover:underline transition-colors"
+                className="group relative inline-block text-green-600 font-bold hover:text-green-700 hover:scale-105 active:scale-95 transition-all pb-0.5"
               >
                 Sign In instead
+                <span className="absolute bottom-0 left-0 w-full h-[2px] bg-green-600 group-hover:bg-green-700 transition-transform duration-300 origin-center scale-x-0 group-hover:scale-x-100" />
               </button>
             </p>
           </form>

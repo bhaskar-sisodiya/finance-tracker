@@ -108,7 +108,7 @@ const About = () => {
           <h2 className="text-lg font-bold text-gray-800 mb-4">Features</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {features.map(({ icon, title, desc }) => (
-              <div key={title} className="bg-white rounded-2xl border border-[#c8e6c9] shadow-sm p-4 flex flex-col gap-2 hover:shadow-md transition-shadow">
+              <div key={title} className="bg-white rounded-2xl border border-[#c8e6c9] shadow-sm p-4 flex flex-col gap-2 hover:shadow-md hover:scale-105 transition-all">
                 <span className="text-2xl">{icon}</span>
                 <h3 className="font-bold text-gray-800 text-sm">{title}</h3>
                 <p className="text-xs text-gray-500 leading-relaxed">{desc}</p>
