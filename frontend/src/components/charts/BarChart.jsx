@@ -24,11 +24,12 @@ const BarChart = ({ year }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const summary = await res.json();
-      const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       const formatted = summary.map((item) => ({
         name: monthNames[item.month - 1],
         debit: item.debit,
         credit: item.credit,
+        budget: item.budget,
       }));
       setData(formatted);
     } catch (err) {
@@ -43,7 +44,7 @@ const BarChart = ({ year }) => {
   return (
     <div className="w-full h-full bg-white flex flex-col p-2 rounded-2xl shadow-sm">
       <div className="flex justify-between items-center mb-2">
-        <h2 className="text-lg font-semibold text-gray-700">Yearly Debit vs Credit Summary</h2>
+        <h2 className="text-lg font-semibold text-gray-700">Yearly Summary (incl. Budget)</h2>
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(Number(e.target.value))}
@@ -60,8 +61,9 @@ const BarChart = ({ year }) => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip formatter={(value) => [`₹${value}`, "Amount"]} />
+            <Tooltip formatter={(value, name) => [`₹${value}`, name.charAt(0).toUpperCase() + name.slice(1)]} />
             <Legend verticalAlign="top" align="center" />
+            <Bar dataKey="budget" fill="#3b82f6" name="Budget" opacity={0.6} />
             <Bar dataKey="debit" fill="#ef4444" name="Debit" />
             <Bar dataKey="credit" fill="#10b981" name="Credit" />
           </ReBarChart>

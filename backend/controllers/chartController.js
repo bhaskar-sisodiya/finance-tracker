@@ -67,6 +67,7 @@ export const getYearlySummary = async (req, res) => {
         month: i + 1,
         debit: entry?.totalDebit || 0,
         credit: entry?.totalCredit || 0,
+        budget: entry?.totalBalance || 0,
       };
     });
 
